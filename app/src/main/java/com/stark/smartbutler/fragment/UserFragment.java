@@ -1,9 +1,14 @@
 package com.stark.smartbutler.fragment;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,10 +20,15 @@ import android.widget.Toast;
 import com.stark.smartbutler.R;
 import com.stark.smartbutler.entity.MyUser;
 import com.stark.smartbutler.ui.LoginActivity;
+import com.stark.smartbutler.utils.L;
+import com.stark.smartbutler.view.CustomDialog;
+
+import java.io.File;
 
 import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.UpdateListener;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  *项目名:  SmartButler
@@ -37,7 +47,13 @@ public class UserFragment extends Fragment implements View.OnClickListener {
     private EditText user_age;
     private EditText user_sex;
     private EditText user_desc;
+    //圆形头像
+    private CircleImageView profile_image;
+    private CustomDialog dialog;
 
+    private Button dialog_camera;
+    private Button dialog_pictrue;
+    private Button dialog_cancel;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_user,null);
@@ -65,6 +81,19 @@ public class UserFragment extends Fragment implements View.OnClickListener {
         user_age.setText(userInfo.getAge() + "");
         user_sex.setText(userInfo.isSex() ? "男" : "女");
         user_desc.setText(userInfo.getDesc());
+
+        //圆形头像
+        profile_image = (CircleImageView) view.findViewById(R.id.profile_image);
+        profile_image.setOnClickListener(this);
+
+        dialog = new CustomDialog(getActivity(),0,0,R.layout.dialog_photo,R.style.pop_anim_style, Gravity.BOTTOM,R.style.pop_anim_style);
+        dialog.setCancelable(false);
+        dialog_camera = (Button) dialog.findViewById(R.id.dialog_camera);
+        dialog_camera.setOnClickListener(this);
+        dialog_pictrue = (Button) dialog.findViewById(R.id.dialog_picture);
+        dialog_pictrue.setOnClickListener(this);
+        dialog_cancel = (Button) dialog.findViewById(R.id.dialog_cancel);
+        dialog_cancel.setOnClickListener(this);
 
     }
 
@@ -125,9 +154,99 @@ public class UserFragment extends Fragment implements View.OnClickListener {
                     Toast.makeText(getActivity(), "输入框不能为空", Toast.LENGTH_SHORT).show();
                 }
                 break;
+
+            case R.id.profile_image:
+                dialog.show();
+                break;
+            case R.id.dialog_cancel:
+                dialog.dismiss();
+                break;
+            case R.id.dialog_camera:
+                toCamera();
+                break;
+            case R.id.dialog_picture:
+                toPictrue();
+                break;
+        }
+    }
+    public static final String PHOTO_IMAGE_FILE_NAME = "fileImg,jpg";
+    public static final int CAMERA_REQUEST_CODE = 100;
+    public static final int PICTURE_REQUEST_CODE =101;
+    public static final int RESULT_REQUEST_CODE =102;
+    private File tempFile = null;
+    //跳转到相册
+    private void toPictrue() {
+        Intent intent = new Intent(Intent.ACTION_PICK);
+        intent.setType("image/*");
+        startActivityForResult(intent,PICTURE_REQUEST_CODE);
+        dialog.dismiss();
+    }
+    //跳转到相机
+    private void toCamera() {
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        //判断内存卡是否可用，可用就进行储存
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(new File(Environment.getExternalStorageDirectory(),PHOTO_IMAGE_FILE_NAME)));
+        startActivityForResult(intent,CAMERA_REQUEST_CODE);
+        dialog.dismiss();
+
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode != getActivity().RESULT_CANCELED) {
+            switch (requestCode) {
+                //相册数据
+                case PICTURE_REQUEST_CODE:
+                    startPhotoZoom(data.getData());
+                    break;
+                //相机数据
+                case CAMERA_REQUEST_CODE:
+                    tempFile = new File(Environment.getExternalStorageDirectory(),PHOTO_IMAGE_FILE_NAME);
+                    startPhotoZoom(Uri.fromFile(tempFile));
+                    break;
+                case RESULT_REQUEST_CODE:
+                    //有可能点击舍弃
+                    if (data != null) {
+                        //拿到图片设置
+                        setImageToView(data);
+                        //既然已经设置了图片，我们原来的就应该删除
+                        if(tempFile != null) {
+                            tempFile.delete();
+                        }
+                    }
+                    break;
+            }
         }
     }
 
+    //裁剪
+    private void startPhotoZoom(Uri uri){
+        if(uri == null){
+            L.e(" url == null ");
+            return;
+        }else {
+            Intent intent = new Intent("com.android.camera.action.CROP");
+            intent.setDataAndType(uri,"image/*");
+            //设置裁剪
+            intent.putExtra("crop","true");
+            intent.putExtra("aspectX",1);
+            intent.putExtra("aspectY",1);
+            //设置图片的质量
+            intent.putExtra("outputX",320);
+            intent.putExtra("outputY",320);
+            //发送数据
+            intent.putExtra("return-data",true);
+            startActivityForResult(intent,RESULT_REQUEST_CODE);
+        }
+    }
+    //设置图片
+    private void setImageToView(Intent data) {
+        Bundle bundle = data.getExtras();
+        if(bundle != null){
+            Bitmap bitmap = bundle.getParcelable("data");
+            profile_image.setImageBitmap(bitmap);
+        }
+    }
     //控制view的焦点
     private void setViewEnabled(boolean is) {
         user_name.setEnabled(is);
