@@ -2,12 +2,15 @@ package com.stark.smartbutler.fragment;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
+import android.util.Base64;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,10 +22,15 @@ import android.widget.Toast;
 
 import com.stark.smartbutler.R;
 import com.stark.smartbutler.entity.MyUser;
+import com.stark.smartbutler.ui.CourierActivity;
 import com.stark.smartbutler.ui.LoginActivity;
 import com.stark.smartbutler.utils.L;
+import com.stark.smartbutler.utils.ShareUtils;
+import com.stark.smartbutler.utils.UtilsTools;
 import com.stark.smartbutler.view.CustomDialog;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 
 import cn.bmob.v3.BmobUser;
@@ -54,6 +62,7 @@ public class UserFragment extends Fragment implements View.OnClickListener {
     private Button dialog_camera;
     private Button dialog_pictrue;
     private Button dialog_cancel;
+    private TextView tv_courier;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_user,null);
@@ -62,6 +71,8 @@ public class UserFragment extends Fragment implements View.OnClickListener {
     }
 
     private void findView(View view) {
+        tv_courier = (TextView) view.findViewById(R.id.tv_courier);
+        tv_courier.setOnClickListener(this);
         user_exit = (Button) view.findViewById(R.id.user_exit);
         user_exit.setOnClickListener(this);
         edit_user = (TextView) view.findViewById(R.id.edit_user);
@@ -86,6 +97,7 @@ public class UserFragment extends Fragment implements View.OnClickListener {
         profile_image = (CircleImageView) view.findViewById(R.id.profile_image);
         profile_image.setOnClickListener(this);
 
+        UtilsTools.getImageFromShare(getActivity(),profile_image);
         dialog = new CustomDialog(getActivity(),0,0,R.layout.dialog_photo,R.style.pop_anim_style, Gravity.BOTTOM,R.style.pop_anim_style);
         dialog.setCancelable(false);
         dialog_camera = (Button) dialog.findViewById(R.id.dialog_camera);
@@ -167,9 +179,11 @@ public class UserFragment extends Fragment implements View.OnClickListener {
             case R.id.dialog_picture:
                 toPictrue();
                 break;
+            case R.id.tv_courier:
+                startActivity(new Intent(getActivity(),CourierActivity.class));
         }
     }
-    public static final String PHOTO_IMAGE_FILE_NAME = "fileImg,jpg";
+    public static final String PHOTO_IMAGE_FILE_NAME = "fileImg.jpg";
     public static final int CAMERA_REQUEST_CODE = 100;
     public static final int PICTURE_REQUEST_CODE =101;
     public static final int RESULT_REQUEST_CODE =102;
@@ -253,5 +267,11 @@ public class UserFragment extends Fragment implements View.OnClickListener {
         user_age.setEnabled(is);
         user_sex.setEnabled(is);
         user_desc.setEnabled(is);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        UtilsTools.putImageToShare(getActivity(),profile_image);
     }
 }
