@@ -12,7 +12,18 @@ import android.widget.Toast;
 import com.kymjs.rxvolley.RxVolley;
 import com.kymjs.rxvolley.client.HttpCallback;
 import com.stark.smartbutler.R;
+import com.stark.smartbutler.adapter.CourierAdapter;
+import com.stark.smartbutler.entity.CourierData;
+import com.stark.smartbutler.utils.L;
 import com.stark.smartbutler.utils.StaticClass;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * 项目名:  SmartButler
@@ -27,6 +38,8 @@ public class CourierActivity extends BaseActivity implements View.OnClickListene
     private EditText et_number;
     private Button btn_get_courier;
     private ListView mListView;
+
+    private List<CourierData> mList = new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,20 +71,44 @@ public class CourierActivity extends BaseActivity implements View.OnClickListene
                  */
                 String name = et_name.getText().toString().trim();
                 String number = et_number.getText().toString().trim();
-                String url = "http://v.juhe.cn/exp/index?key="+ StaticClass.COURIER_KEY
-                        +"&com="+name+"&no"+number;
+                String url = "http://v.juhe.cn/exp/index?key="+StaticClass.COURIER_KEY+"&com="+name+"&no="+number;
 
                 if(!TextUtils.isEmpty(name) && !TextUtils.isEmpty(number)){
                     RxVolley.get(url, new HttpCallback() {
                         @Override
                         public void onSuccess(String t) {
-                            super.onSuccess(t);
+                            //Toast.makeText(CourierActivity.this,t,Toast.LENGTH_SHORT).show();
+                            L.i("Json:"+t);
+                            //解析Json
+                            parsingJson(t);
                         }
                     });
                 }else {
                     Toast.makeText(this,"输入不能为空",Toast.LENGTH_SHORT).show();
                 }
                 break;
+        }
+    }
+
+    private void parsingJson(String t) {
+        try {
+            JSONObject jsonObject = new JSONObject(t);
+            JSONObject jsonResult = jsonObject.getJSONObject("result");
+            JSONArray jsonArray = jsonResult.getJSONArray("list");
+            for(int i = 0 ;i<jsonArray.length();i++){
+                JSONObject json = (JSONObject) jsonArray.get(i);
+
+                CourierData data = new CourierData();
+                data.setRemark(json.getString("remark"));
+                data.setZone(json.getString("zone"));
+                data.setDatetime(json.getString("datetime"));
+                mList.add(data);
+            }
+            Collections.reverse(mList);
+            CourierAdapter adapter = new CourierAdapter(this,mList);
+            mListView.setAdapter(adapter);
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
     }
 }
