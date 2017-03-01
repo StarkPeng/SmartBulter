@@ -17,4 +17,5 @@ public class StaticClass {
     public static final String BUGLY_APP_ID = "1b395f0872";
     public static final String BMOB_APP_ID = "25c44be960611d58ccacd208a686574f";
     public static final String COURIER_KEY ="0e6d7cb1944cfd077c5fdbeb407c98ba";
+    public static final String POHNE_KEY = "aa6dd320852842618c9cbad0b4e0862c";
 }

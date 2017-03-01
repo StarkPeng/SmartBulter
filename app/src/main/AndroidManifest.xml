@@ -58,8 +58,12 @@
 
         <activity android:name=".ui.ForgetPasswordActivity"
             android:label="@string/find_password"/>
+
         <activity android:name=".ui.CourierActivity"
             android:label="物流查询"/>
+
+        <activity android:name=".ui.PhoneActivity"
+            android:label="归属地查询"/>
     </application>
 
 </manifest>

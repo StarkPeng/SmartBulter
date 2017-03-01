@@ -24,6 +24,7 @@ import com.stark.smartbutler.R;
 import com.stark.smartbutler.entity.MyUser;
 import com.stark.smartbutler.ui.CourierActivity;
 import com.stark.smartbutler.ui.LoginActivity;
+import com.stark.smartbutler.ui.PhoneActivity;
 import com.stark.smartbutler.utils.L;
 import com.stark.smartbutler.utils.ShareUtils;
 import com.stark.smartbutler.utils.UtilsTools;
@@ -63,6 +64,7 @@ public class UserFragment extends Fragment implements View.OnClickListener {
     private Button dialog_pictrue;
     private Button dialog_cancel;
     private TextView tv_courier;
+    private TextView tv_phone;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_user,null);
@@ -71,6 +73,8 @@ public class UserFragment extends Fragment implements View.OnClickListener {
     }
 
     private void findView(View view) {
+        tv_phone = (TextView) view.findViewById(R.id.tv_phone);
+        tv_phone.setOnClickListener(this);
         tv_courier = (TextView) view.findViewById(R.id.tv_courier);
         tv_courier.setOnClickListener(this);
         user_exit = (Button) view.findViewById(R.id.user_exit);
@@ -181,6 +185,10 @@ public class UserFragment extends Fragment implements View.OnClickListener {
                 break;
             case R.id.tv_courier:
                 startActivity(new Intent(getActivity(),CourierActivity.class));
+                break;
+            case R.id.tv_phone:
+                startActivity(new Intent(getActivity(),PhoneActivity.class));
+                break;
         }
     }
     public static final String PHOTO_IMAGE_FILE_NAME = "fileImg.jpg";
