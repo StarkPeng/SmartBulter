@@ -44,7 +44,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         initData();
         initView();
     }
-
+    //初始化数据
     private void initData() {
         mTitle = new ArrayList<>();
         mTitle.add(getResources().getString(R.string.fragment_butler));
