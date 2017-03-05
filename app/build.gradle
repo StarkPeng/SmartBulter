@@ -45,4 +45,6 @@ dependencies {
     compile ('com.kymjs.rxvolley:rxvolley:1.1.4'){
         exclude group:'io.reactivex'
     }
+    //picasso
+    compile files('libs/picasso-2.5.2.jar')
 }

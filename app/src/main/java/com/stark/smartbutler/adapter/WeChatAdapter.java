@@ -4,12 +4,14 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.stark.smartbutler.R;
 import com.stark.smartbutler.entity.WeChatData;
+import com.stark.smartbutler.utils.PicassoUtils;
 
 import java.util.List;
 
@@ -23,12 +25,16 @@ public class WeChatAdapter extends BaseAdapter{
     private LayoutInflater inflater;
     private List<WeChatData> mList;
     private WeChatData data;
+    private int width,height;
+    private WindowManager mWindowManager;
 
     public WeChatAdapter(Context mContext, List<WeChatData> mList){
         this.mContext = mContext;
         this.mList = mList;
         inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
+        mWindowManager = (WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE);
+        width =mWindowManager.getDefaultDisplay().getWidth();
+        height = mWindowManager.getDefaultDisplay().getHeight();
     }
     @Override
     public int getCount() {
@@ -61,6 +67,8 @@ public class WeChatAdapter extends BaseAdapter{
         data = mList.get(position);
         viewHolder.tv_title.setText(data.getTitle());
         viewHolder.tv_source.setText(data.getSource());
+        //加载图片
+        PicassoUtils.loadImageViewSize(mContext,data.getImgUrl(),width/3,280,viewHolder.iv_img);
         return convertView;
     }
 

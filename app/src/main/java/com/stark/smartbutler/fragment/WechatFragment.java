@@ -1,10 +1,12 @@
 package com.stark.smartbutler.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -13,6 +15,8 @@ import com.kymjs.rxvolley.client.HttpCallback;
 import com.stark.smartbutler.R;
 import com.stark.smartbutler.adapter.WeChatAdapter;
 import com.stark.smartbutler.entity.WeChatData;
+import com.stark.smartbutler.ui.WebViewActivity;
+import com.stark.smartbutler.utils.L;
 import com.stark.smartbutler.utils.StaticClass;
 
 import org.json.JSONArray;
@@ -34,6 +38,8 @@ public class WechatFragment extends Fragment {
 
     private ListView mListView;
     private List<WeChatData> mList = new ArrayList<>();
+    private List<String> mListTitle = new ArrayList<>();
+    private List<String> mListUrl = new ArrayList<>();
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_wechat,null);
@@ -54,7 +60,17 @@ public class WechatFragment extends Fragment {
                 //解析JSON
                 parsingJson(t);
             }
+        });
 
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                L.i("positon:" + position);
+                Intent intent = new Intent(getActivity(),WebViewActivity.class);
+                intent.putExtra("title",mListTitle.get(position));
+                intent.putExtra("url",mListUrl.get(position));
+                startActivity(intent);
+            }
         });
     }
     private void parsingJson(String t) {
@@ -65,10 +81,17 @@ public class WechatFragment extends Fragment {
             for (int i = 0 ;i < jsonList.length() ;i++) {
                 JSONObject json = (JSONObject) jsonList.get(i);
                 WeChatData data = new WeChatData();
-                data.setTitle(json.getString("title"));
+
+                String title = json.getString("title");
+                String url = json.getString("url");
+
+                data.setTitle(title);
                 data.setSource(json.getString("source"));
                 data.setImgUrl(json.getString("firstImg"));
                 mList.add(data);
+
+                mListTitle.add(title);
+                mListUrl.add(url);
             }
             WeChatAdapter adapter = new WeChatAdapter(getActivity(),mList);
             mListView.setAdapter(adapter);
