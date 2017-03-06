@@ -1,6 +1,8 @@
 package com.stark.smartbutler.adapter;
 
 import android.content.Context;
+import android.text.TextUtils;
+import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,9 +34,12 @@ public class WeChatAdapter extends BaseAdapter{
         this.mContext = mContext;
         this.mList = mList;
         inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        //获取屏幕宽和高
         mWindowManager = (WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE);
-        width =mWindowManager.getDefaultDisplay().getWidth();
-        height = mWindowManager.getDefaultDisplay().getHeight();
+        DisplayMetrics dm = new DisplayMetrics();
+        mWindowManager.getDefaultDisplay().getMetrics(dm);
+        width = dm.widthPixels;
+        height = dm.heightPixels;
     }
     @Override
     public int getCount() {
@@ -68,7 +73,8 @@ public class WeChatAdapter extends BaseAdapter{
         viewHolder.tv_title.setText(data.getTitle());
         viewHolder.tv_source.setText(data.getSource());
         //加载图片
-        PicassoUtils.loadImageViewSize(mContext,data.getImgUrl(),width/3,280,viewHolder.iv_img);
+        if (!TextUtils.isEmpty(data.getImgUrl()))
+            PicassoUtils.loadImageViewSize(mContext,data.getImgUrl(),width/3,height/6,viewHolder.iv_img);
         return convertView;
     }
 

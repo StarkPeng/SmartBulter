@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/SmartBulter.iml" filepath="$PROJECT_DIR$/SmartBulter.iml" />
+      <module fileurl="file://$PROJECT_DIR$/SmartButler.iml" filepath="$PROJECT_DIR$/SmartButler.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>

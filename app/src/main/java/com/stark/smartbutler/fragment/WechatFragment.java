@@ -51,7 +51,7 @@ public class WechatFragment extends Fragment {
         mListView = (ListView) view.findViewById(R.id.mListView);
 
         //解析接口
-        String url = "http://v.juhe.cn/weixin/query?key=" + StaticClass.WECHAT_KEY;
+        String url = "http://v.juhe.cn/weixin/query?key=" + StaticClass.WECHAT_KEY +"&ps=50";
         RxVolley.get(url, new HttpCallback() {
             @Override
             public void onSuccess(String t) {
@@ -88,6 +88,7 @@ public class WechatFragment extends Fragment {
                 data.setTitle(title);
                 data.setSource(json.getString("source"));
                 data.setImgUrl(json.getString("firstImg"));
+                L.i("firstImg : "+ json.getString("firstImg"));
                 mList.add(data);
 
                 mListTitle.add(title);

@@ -19,10 +19,11 @@ public class PicassoUtils {
 
     }
 
-    //默认加载图片（指定大小）
-    public static void loadImageViewSize(Context mContext,String url,int width,int height,ImageView imageView){
-        Picasso.with(mContext).load(url).resize(width,height).centerCrop().into(imageView);
+    //默认加载图片(指定大小)
+    public static void loadImageViewSize(Context mContext, String url, int width, int height, ImageView imageView) {
+        Picasso.with(mContext).load(url).config(Bitmap.Config.RGB_565).resize(width, height).centerCrop().into(imageView);
     }
+
     //加载图片有默认图片
     public static void loadImageViewHolder(Context mContext,String url,int loadImage,int errorImage,ImageView imageView){
         Picasso.with(mContext).load(url).placeholder(loadImage).error(errorImage)
