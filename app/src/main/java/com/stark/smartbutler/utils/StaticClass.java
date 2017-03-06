@@ -19,4 +19,6 @@ public class StaticClass {
     public static final String COURIER_KEY ="0e6d7cb1944cfd077c5fdbeb407c98ba";
     public static final String POHNE_KEY = "aa6dd320852842618c9cbad0b4e0862c";
     public static final String WECHAT_KEY = "9ae252627cab201773846ab35bc2b1d8";
+    //妹子接口
+    public static final String GIRL_URL = "http://gank.io/api/search/query/listview/category/福利/count/50/page/1";
 }

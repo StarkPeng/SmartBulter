@@ -5,4 +5,5 @@
     <string name="login">登陆</string>
     <string name="find_password">找回密码</string>
     <string name="text_now_login">正在登陆...</string>
+    <string name="text_welfare">福利</string>
 </resources>
