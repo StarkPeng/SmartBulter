@@ -21,4 +21,7 @@ public class StaticClass {
     public static final String WECHAT_KEY = "9ae252627cab201773846ab35bc2b1d8";
     //妹子接口
     public static final String GIRL_URL = "http://gank.io/api/search/query/listview/category/福利/count/50/page/1";
+
+    //问答机器人
+    public static final String CHAT_LIST_KEY = "de17b8d48abc927f58619a17dea9f1d0";
 }

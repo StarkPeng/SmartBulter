@@ -15,21 +15,24 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:padding="3dp">
+        android:gravity="center_vertical">
 
-        <Button
-            android:id="@+id/btn_left"
-            android:layout_width="match_parent"
+        <EditText
+            android:id="@+id/et_text"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="左边"/>
-
+            android:hint="输入"/>
         <Button
-            android:id="@+id/btn_right"
-            android:layout_width="match_parent"
+            android:layout_margin="5dp"
+            android:id="@+id/btn_send"
+            android:text="发送"
+            android:textColor="@color/color_white"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="右边"/>
+            android:background="@drawable/button_bg"/>
+
+
     </LinearLayout>
 
 </LinearLayout>

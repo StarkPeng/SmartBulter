@@ -19,7 +19,6 @@
         android:background="@drawable/chat_bg_cloud"
         android:gravity="center_vertical"
         android:text="左边"
-        android:textSize="18sp"
         android:textColor="@color/color_white"/>
 
 </LinearLayout>
