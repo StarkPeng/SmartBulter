@@ -2,6 +2,8 @@ package com.stark.smartbutler.application;
 
 import android.app.Application;
 
+import com.iflytek.cloud.SpeechConstant;
+import com.iflytek.cloud.SpeechUtility;
 import com.stark.smartbutler.utils.StaticClass;
 import com.tencent.bugly.crashreport.CrashReport;
 
@@ -24,6 +26,8 @@ public class BaseApplication extends Application {
 
         //初始化Bmob
         Bmob.initialize(this, StaticClass.BMOB_APP_ID);
+
+        SpeechUtility.createUtility(getApplicationContext(), SpeechConstant.APPID +"=" + StaticClass.VOICE_KEY);
 
     }
 }

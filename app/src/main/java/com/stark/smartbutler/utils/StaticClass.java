@@ -24,4 +24,9 @@ public class StaticClass {
 
     //问答机器人
     public static final String CHAT_LIST_KEY = "de17b8d48abc927f58619a17dea9f1d0";
+
+    public static final String VOICE_KEY = "58c54ef3";
+
+    //短信Action
+    public static final String SMS_ACTION = "android.provider.Telephony.SMS_RECEIVED";
 }
