@@ -22,7 +22,6 @@ import com.stark.smartbutler.utils.StaticClass;
 public class SmsService extends Service{
 
     private SmsReceiver mSmsReceiver;
-    private IntentFilter mIntentFilter;
     //发件人号码
     private String smsPhone;
     //发件人内容
@@ -48,10 +47,10 @@ public class SmsService extends Service{
         L.i("init service");
         //动态注册广播
         mSmsReceiver = new SmsReceiver();
-        mIntentFilter = new IntentFilter();
+        IntentFilter mIntentFilter = new IntentFilter();
         //添加action
         mIntentFilter.addAction(StaticClass.SMS_ACTION);
-        //设置权限
+        //设置优先级
         mIntentFilter.setPriority(Integer.MAX_VALUE);
         registerReceiver(mSmsReceiver,mIntentFilter);
 
@@ -68,7 +67,6 @@ public class SmsService extends Service{
     public class SmsReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
-            L.i("来短信了");
             String action = intent.getAction();
             if (StaticClass.SMS_ACTION.equals(action)){
                 L.i("来短信了");
