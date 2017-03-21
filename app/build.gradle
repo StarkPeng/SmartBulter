@@ -1,9 +1,13 @@
+//声明android程序
 apply plugin: 'com.android.application'
 
 android {
+    //编译SDK的版本
     compileSdkVersion 25
+    //build tools的版本
     buildToolsVersion "25.0.1"
     defaultConfig {
+        //应用的包名
         applicationId "com.stark.smartbutler"
         minSdkVersion 22
         targetSdkVersion 25
@@ -17,7 +21,9 @@ android {
     }
     buildTypes {
         release {
+            //是否进行混淆
             minifyEnabled false
+            //混淆文件的版本
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
