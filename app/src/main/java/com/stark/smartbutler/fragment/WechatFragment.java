@@ -45,7 +45,7 @@ public class WechatFragment extends Fragment {
     private List<String> mListUrl = new ArrayList<>();
     private WeChatAdapter adapter;
     private int flag = 0;
-    private int ps = 10;
+    private int pno =2;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_wechat,null);
@@ -57,7 +57,7 @@ public class WechatFragment extends Fragment {
         mListView = (ListView) view.findViewById(R.id.mListView);
         mListRefresh = (SwipeRefreshLayout) view.findViewById(R.id.mListRefresh);
         //解析接口
-        String url = "http://v.juhe.cn/weixin/query?key=" + StaticClass.WECHAT_KEY +"&ps=10";
+        String url = "http://v.juhe.cn/weixin/query?key=" + StaticClass.WECHAT_KEY +"&pno=1&ps=10";
         RxVolley.get(url, new HttpCallback() {
             @Override
             public void onSuccess(String t) {
@@ -83,11 +83,8 @@ public class WechatFragment extends Fragment {
             @Override
             public void onRefresh() {
                 //解析接口
-                if (ps == 50) {
-                    ps =10;
-                }
-                String url = "http://v.juhe.cn/weixin/query?key=" + StaticClass.WECHAT_KEY +"&ps=" +ps ;
-                ps = ps +5;
+                String url = "http://v.juhe.cn/weixin/query?key=" + StaticClass.WECHAT_KEY +"&pno="+pno+"&ps=10";
+                pno++;
                 RxVolley.get(url, new HttpCallback() {
                     @Override
                     public void onSuccess(String t) {

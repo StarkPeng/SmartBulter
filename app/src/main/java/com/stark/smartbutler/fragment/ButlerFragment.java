@@ -175,7 +175,7 @@ public class ButlerFragment extends Fragment implements View.OnClickListener {
 
     }
 
-    //說話的方法
+    //开始语音对话
     private void startSpeak(String text) {
         //3.开始合成
         mTts.startSpeaking(text, mSynListener);
