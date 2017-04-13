@@ -71,7 +71,7 @@ public class WechatFragment extends Fragment {
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                L.i("positon:" + position);
+                L.i("Position:" + position);
                 Intent intent = new Intent(getActivity(),WebViewActivity.class);
                 intent.putExtra("title",mListTitle.get(position));
                 intent.putExtra("url",mListUrl.get(position));
@@ -119,7 +119,6 @@ public class WechatFragment extends Fragment {
                 data.setTitle(title);
                 data.setSource(json.getString("source"));
                 data.setImgUrl(json.getString("firstImg"));
-               // L.i("firstImg : "+ json.getString("firstImg"));
                 L.i("title" + title);
                 flag = 0;
                 for(int j = 0;j<mList.size();j++){
